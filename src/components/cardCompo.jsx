@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { React, useState } from "react";
 import i1 from "../assets/1.jpg";
 import i2 from "../assets/2.jpg";
 import i3 from "../assets/3.jpg";
@@ -19,11 +19,26 @@ import t2 from "../assets/t2.jpg";
 import t3 from "../assets/t3.jpg";
 import t4 from "../assets/t4.jpg";
 import t5 from "../assets/t5.jpg";
+import "./CCard.css";  
 function Card() {
   const [ischairCheck, setChaircheck] = useState(false);
   const [isLampCheck, setlampcheck] = useState(false);
   const [isSofaCheck, setSofacheck] = useState(false);
   const [isTableCheck, setTablecheck] = useState(false);
+
+  const activeBox = [];
+  if (ischairCheck == true) {
+    activeBox.push("chair");
+  }
+  if (isLampCheck == true) {
+    activeBox.push("lamp");
+  }
+  if (isSofaCheck == true) {
+    activeBox.push("sofa");
+  }
+  if (isTableCheck == true) {
+    activeBox.push("table");
+  }
 
   const CardData = [
     { cardImg: s1, cardTitle: "sofa", price: 2500 },
@@ -95,21 +110,35 @@ function Card() {
   //   card rendering
 
   function Allcard() {
-    if (isLampCheck === true ) {
-      return CardData.filter((filterData) => {
-        return filterData.cardTitle === "lamp"  ;
-      }).map((finalData, index) => {
-        return (
-          <div key={index}>
-            {" "}
-            <img src={finalData.cardImg} alt="" />{" "}
-          </div>
-        );
+    let filterData = [];
+    if (activeBox.length > 0) {
+      console.log(activeBox);
+      filterData = CardData.filter((data) => {
+        // return data.cardTitle.includes(activeBox[0])
+        return activeBox.some((box) => data.cardTitle.includes(box));
       });
+    } else {
+      filterData = CardData;
     }
-    return null;
+    return (
+      <>
+          <div className="cardDiv">
+        {filterData.map((finalData, index) => {
+        
+        
+          return (
+            <div className="maincard" key={index}>
+              <img  className="img" src={finalData.cardImg} alt="" />
+              <h5  className="tlte"> article  {finalData.cardTitle}</h5>
+              <h5 className="price" > price:  {finalData.price} </h5>
+            </div>
+          );
+        })}
+        </div>
+      </>
+    );
   }
-
+  // Allcard();
   return (
     <>
       {/* buttons */}
